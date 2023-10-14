@@ -1,19 +1,26 @@
 import datetime
+import fnmatch
 import json
 import platform
 from pathlib import Path
 
 from .datatype import File
 
-EXCLUDE = [".git", ".vscode", "__pycache__", ".idea", ".ipynb_checkpoints", ".venv"]
+EXCLUDE = [
+    ".*",  # hidden folders
+    "__*__",  # __pycache__
+    "*.exe",  # executables
+]
 
 
 def is_valid(path: Path) -> bool:
     if not path.is_file():
         return False
+    path = path.absolute()
     for pattern in EXCLUDE:
-        if pattern in path.parts:
-            return False
+        for part in path.parts:
+            if fnmatch.fnmatch(part, pattern):
+                return False
     return True
 
 
