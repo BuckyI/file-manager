@@ -58,9 +58,12 @@ def submit(database, source):
 
     db = Database(database)
     for file in files:
-        data = json.load(open(file, "r", encoding="utf-8"))
-        db.update(data["files"])
-        click.echo(f"Submit {str(file)} finished")
+        try:
+            data = json.load(open(file, "r", encoding="utf-8"))
+            db.update(data["files"])
+            click.echo(f"Submit {str(file)} finished")
+        except Exception as e:
+            click.echo(f"Submit {str(file)} failed! Exception: {e}")
     click.echo("Finished")
 
 
