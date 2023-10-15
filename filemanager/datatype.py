@@ -1,7 +1,8 @@
-import hashlib
 import os
 from datetime import datetime
 from pathlib import Path
+
+from .utils import hash
 
 
 class File:
@@ -12,11 +13,7 @@ class File:
         assert self.path.exists(), f"File at {file_path} not exist!"
 
     def hash(self) -> str:
-        hash = hashlib.md5()
-        with open(self.path, "rb") as file:
-            for chunk in iter(lambda: file.read(4096), b""):
-                hash.update(chunk)
-        return hash.hexdigest()
+        return hash(self.path)
 
     def earliest_timestamp(self) -> float:
         stat = self.path.stat()
