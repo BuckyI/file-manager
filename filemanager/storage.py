@@ -15,6 +15,7 @@ class Database:
         "st_ctime_ns": "INTEGER",
         "st_size": "INTEGER",
     }
+    field_sql = "md5, path, ctime, st_atime_ns, st_mtime_ns, st_ctime_ns, st_size"
 
     def __init__(self, db_path="data.sqlite"):
         self.db_path = db_path
@@ -77,10 +78,6 @@ class Database:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         for item in data:
-            insert_sql = (
-                "INSERT INTO files (md5, path, ctime, st_atime_ns, st_mtime_ns, st_ctime_ns, st_size) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?)"
-            )
             insert_row = (
                 item["md5"],
                 item["path"],
@@ -90,11 +87,17 @@ class Database:
                 item["stat"]["st_ctime_ns"],
                 item["stat"]["st_size"],
             )
-            cursor.execute("SELECT * FROM files WHERE md5 = ?", (item["md5"],))
-            # [1:] to remove id
-            exist = any(row[1:] == insert_row for row in cursor.fetchall())
-            if not exist:  # insert if no duplicate
-                cursor.execute(insert_sql, insert_row)
+
+            # prevent duplicate
+            lookup_sql = f"SELECT {self.field_sql} FROM files WHERE md5 = ?"
+            cursor.execute(lookup_sql, (item["md5"],))
+            if any(row == insert_row for row in cursor.fetchall()):
+                continue
+
+            insert_sql = (
+                f"INSERT INTO files ({self.field_sql}) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            )
+            cursor.execute(insert_sql, insert_row)
 
         conn.commit()
         conn.close()
