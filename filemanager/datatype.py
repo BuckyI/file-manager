@@ -20,7 +20,7 @@ class File:
 
     def earliest_timestamp(self) -> float:
         stat = self.path.stat()
-        return min(stat.st_atime, stat.st_mtime, stat.st_ctime)
+        return min(stat.st_atime_ns, stat.st_mtime_ns, stat.st_ctime_ns) / 1e9
 
     @staticmethod
     def filesize2str(size: int) -> str:
