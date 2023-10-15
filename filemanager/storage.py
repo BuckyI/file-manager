@@ -1,23 +1,43 @@
+import os
 import sqlite3
 from typing import Dict, List
 
 
 class Database:
     TABLENAME = "files"
-    FIELDS = (
-        "id",
-        "md5",
-        "path",
-        "ctime",
-        "st_atime_ns",
-        "st_mtime_ns",
-        "st_ctime_ns",
-        "st_size",
-    )
+    FIELDS = {
+        "id": "INTEGER",
+        "md5": "TEXT",
+        "path": "TEXT",
+        "ctime": "REAL",
+        "st_atime_ns": "INTEGER",
+        "st_mtime_ns": "INTEGER",
+        "st_ctime_ns": "INTEGER",
+        "st_size": "INTEGER",
+    }
 
     def __init__(self, db_path="data.sqlite"):
         self.db_path = db_path
+        if os.path.exists(db_path):
+            assert self.validate(db_path), "you might connected the wrong database"
         self.init_table()
+
+    @classmethod
+    def validate(cls, db_path: str):
+        "validate if an existing database suits this class"
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            if (cls.TABLENAME,) not in cursor.fetchall():
+                return False
+
+            cursor.execute("PRAGMA table_info({})".format(cls.TABLENAME))
+            fields = {col[1]: col[2] for col in cursor.fetchall()}
+            if fields != cls.FIELDS:
+                return False
+
+        return True
 
     def init_table(self):
         conn = sqlite3.connect(self.db_path)
