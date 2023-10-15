@@ -104,6 +104,31 @@ class Database:
         item_num_new = self.count_all()
         print("Update {} items (now: {})".format(item_num_new - item_num, item_num_new))
 
+    def merge(self, db_path: str):
+        "merge an existing database into this one"
+        update_count = 0
+        if not self.validate(db_path):
+            return update_count
+        main_conn = sqlite3.connect(self.db_path)
+        main_cursor = main_conn.cursor()
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT {} FROM files".format(self.field_sql))
+        for insert_row in cursor.fetchall():
+            # prevent duplicate
+            lookup_sql = f"SELECT {self.field_sql} FROM files WHERE md5 = ?"
+            main_cursor.execute(lookup_sql, (insert_row[0],))
+            if any(row == insert_row for row in main_cursor.fetchall()):
+                continue
+
+            insert_sql = (
+                f"INSERT INTO files ({self.field_sql}) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            )
+            main_cursor.execute(insert_sql, insert_row)
+            update_count += 1
+        return update_count
+
     def show_all(self):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -133,3 +158,11 @@ class Database:
             cursor.execute("DELETE FROM files WHERE id = ?", (id,))
         conn.commit()
         conn.close()
+
+    def lookup(self, md5: str):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM files WHERE md5 = ?", (md5,))
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
