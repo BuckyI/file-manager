@@ -1,0 +1,292 @@
+{
+    "system": "Windows-10-10.0.19045-SP0",
+    "scan_directory": "C:\\Users\\45489\\Desktop\\file-manager",
+    "files": [
+        {
+            "md5": "eac9bcdb93d8cbe0cfad5d42f6919273",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\data.sqlite",
+            "earliest_timestamp": 1697372633.4757602,
+            "stat": {
+                "st_atime": 1697372646.0753832,
+                "st_atime_ns": 1697372646075383200,
+                "st_ctime": 1697372633.4757602,
+                "st_ctime_ns": 1697372633475760200,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 3096224743970092,
+                "st_mode": 33206,
+                "st_mtime": 1697372633.7444615,
+                "st_mtime_ns": 1697372633744461600,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 16384,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "0cdf8ed0e9ec4faf515cbdbf346a5843",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\main.py",
+            "earliest_timestamp": 1697275012.3533654,
+            "stat": {
+                "st_atime": 1697372646.6032183,
+                "st_atime_ns": 1697372646603218400,
+                "st_ctime": 1697275012.3533654,
+                "st_ctime_ns": 1697275012353365500,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 562949953820391,
+                "st_mode": 33206,
+                "st_mtime": 1697359922.8397071,
+                "st_mtime_ns": 1697359922839707200,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 1805,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "d6fe4197b81e8be51b9bfceb4230e2be",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\README.md",
+            "earliest_timestamp": 1697275012.3513691,
+            "stat": {
+                "st_atime": 1697372647.169479,
+                "st_atime_ns": 1697372647169478800,
+                "st_ctime": 1697275012.3513694,
+                "st_ctime_ns": 1697275012351369300,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 1125899907241679,
+                "st_mode": 33206,
+                "st_mtime": 1697357834.9310284,
+                "st_mtime_ns": 1697357834931028300,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 165,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "e4efe862beed09234921127d84eac262",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\requirements.txt",
+            "earliest_timestamp": 1697356377.4594524,
+            "stat": {
+                "st_atime": 1697372647.6650312,
+                "st_atime_ns": 1697372647665031100,
+                "st_ctime": 1697356377.4594524,
+                "st_ctime_ns": 1697356377459452500,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 11821949021958844,
+                "st_mode": 33206,
+                "st_mtime": 1697356383.927598,
+                "st_mtime_ns": 1697356383927598100,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 7,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "52835a129bed29b165c53ec4814ef54d",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\test.ipynb",
+            "earliest_timestamp": 1697282623.37312,
+            "stat": {
+                "st_atime": 1697372648.2064793,
+                "st_atime_ns": 1697372648206479300,
+                "st_ctime": 1697282623.37312,
+                "st_ctime_ns": 1697282623373120000,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 2533274790777097,
+                "st_mode": 33206,
+                "st_mtime": 1697371088.4420924,
+                "st_mtime_ns": 1697371088442092400,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 7396,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "34bf599ad7c5706c106b80d9911c9829",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\test.py",
+            "earliest_timestamp": 1697356570.492251,
+            "stat": {
+                "st_atime": 1697372648.7692502,
+                "st_atime_ns": 1697372648769250100,
+                "st_ctime": 1697356570.492251,
+                "st_ctime_ns": 1697356570492250900,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 8162774324721212,
+                "st_mode": 33206,
+                "st_mtime": 1697356581.0995266,
+                "st_mtime_ns": 1697356581099526700,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 273,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "c91f0030663fdc748e1b4f8a3d814de7",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\filemanager\\datatype.py",
+            "earliest_timestamp": 1697275012.35237,
+            "stat": {
+                "st_atime": 1697372649.3697665,
+                "st_atime_ns": 1697372649369766500,
+                "st_ctime": 1697275012.3523698,
+                "st_ctime_ns": 1697275012352369800,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 562949953820389,
+                "st_mode": 33206,
+                "st_mtime": 1697355032.2951057,
+                "st_mtime_ns": 1697355032295105700,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 1868,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "439dd9207961af23ecef221c84fdef30",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\filemanager\\scan.py",
+            "earliest_timestamp": 1697275012.3533654,
+            "stat": {
+                "st_atime": 1697372649.8736508,
+                "st_atime_ns": 1697372649873650800,
+                "st_ctime": 1697275012.3533654,
+                "st_ctime_ns": 1697275012353365500,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 562949953820390,
+                "st_mode": 33206,
+                "st_mtime": 1697284747.2988844,
+                "st_mtime_ns": 1697284747298884300,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 1504,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "cd56b51d7cf2836d7241cf7e97b28706",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\filemanager\\storage.py",
+            "earliest_timestamp": 1697348848.8262658,
+            "stat": {
+                "st_atime": 1697372650.402204,
+                "st_atime_ns": 1697372650402204000,
+                "st_ctime": 1697348848.8262658,
+                "st_ctime_ns": 1697348848826265800,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 9851624185479795,
+                "st_mode": 33206,
+                "st_mtime": 1697372567.8882313,
+                "st_mtime_ns": 1697372567888231200,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 5338,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "d0ebd3c15438edcc552e018e0a80e1e4",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\filemanager\\utils.py",
+            "earliest_timestamp": 1697354900.2794373,
+            "stat": {
+                "st_atime": 1697372650.8969922,
+                "st_atime_ns": 1697372650896992300,
+                "st_ctime": 1697354900.2794373,
+                "st_ctime_ns": 1697354900279437200,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 8162774324717998,
+                "st_mode": 33206,
+                "st_mtime": 1697355643.1493955,
+                "st_mtime_ns": 1697355643149395400,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 522,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "efdf359e8e919adee1d870e88588e7d9",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\test\\data.json",
+            "earliest_timestamp": 1697275797.3016694,
+            "stat": {
+                "st_atime": 1697372651.4526792,
+                "st_atime_ns": 1697372651452679200,
+                "st_ctime": 1697342647.4233844,
+                "st_ctime_ns": 1697342647423384500,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 2251799814291875,
+                "st_mode": 33206,
+                "st_mtime": 1697275797.3016694,
+                "st_mtime_ns": 1697275797301669400,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 21133,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "450f88717f558a139f5e8321ae244a1f",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\test\\data.sqlite",
+            "earliest_timestamp": 1697352261.4875963,
+            "stat": {
+                "st_atime": 1697372651.9467204,
+                "st_atime_ns": 1697372651946720300,
+                "st_ctime": 1697352261.4875963,
+                "st_ctime_ns": 1697352261487596200,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 3940649674127638,
+                "st_mode": 33206,
+                "st_mtime": 1697358946.1774707,
+                "st_mtime_ns": 1697358946177470700,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 32768,
+                "st_uid": 0
+            }
+        },
+        {
+            "md5": "ff2629ec3cf514f85804b7bf0689fd25",
+            "path": "C:\\Users\\45489\\Desktop\\file-manager\\test\\filescan_20231014171125.json",
+            "earliest_timestamp": 1697274685.0,
+            "stat": {
+                "st_atime": 1697372652.4641976,
+                "st_atime_ns": 1697372652464197600,
+                "st_ctime": 1697344973.7998414,
+                "st_ctime_ns": 1697344973799841300,
+                "st_dev": 2752349269,
+                "st_file_attributes": 32,
+                "st_gid": 0,
+                "st_ino": 7318349395083879,
+                "st_mode": 33206,
+                "st_mtime": 1697274685.0,
+                "st_mtime_ns": 1697274685000000000,
+                "st_nlink": 1,
+                "st_reparse_tag": 0,
+                "st_size": 59922,
+                "st_uid": 0
+            }
+        }
+    ]
+}
