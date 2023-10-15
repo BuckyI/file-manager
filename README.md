@@ -7,4 +7,3 @@ Scan files and store their information. Identifying duplicates, tracing versions
 ```bash
 pyinstaller main.py -F --clean
 ```
-

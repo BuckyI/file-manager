@@ -1,18 +1,27 @@
 import argparse
 from pathlib import Path
 
+import click
+
 from filemanager.scan import scan_directory
 
 
-def init_argsparse():
-    parser = argparse.ArgumentParser(description="scan file information")
-    parser.add_argument("-d", "--directory", type=str, default=".")
-    args = parser.parse_args()
+@click.group(help="scan file information")
+def cli():
+    pass
 
-    assert Path(args.directory).exists(), "directory does not exist!"
-    return args
 
+@click.command()
+@click.option("-d", "--directory", default=".", help="The folder to scan")
+def scan(directory):
+    if not Path(directory).exists():
+        click.echo("directory does not exist!")
+        return
+    scan_directory(directory, save=True)
+    click.echo(f"Scan {directory} finished")
+
+
+cli.add_command(scan)
 
 if __name__ == "__main__":
-    args = init_argsparse()
-    scan_directory(directory=args.directory, save=True)
+    cli()
