@@ -5,6 +5,7 @@ import platform
 from pathlib import Path
 
 from .datatype import File
+from .storage import Database
 
 
 class ScanFilter:
@@ -14,27 +15,35 @@ class ScanFilter:
         "*.exe",  # executables
     ]
 
-    def __init__(self) -> None:
+    def __init__(self, *, db_path: str = None) -> None:
+        self.db = None  # refer to database to filter items
+        if db_path and Path(db_path).exists() and Database.validate_database(db_path):
+            self.db = Database(db_path)
+
         # there exists many same string that is allowed
         self._cache_permit = set()
 
     def is_valid(self, path: Path) -> bool:
         if not path.is_file():  # not an existing file
             return False
-        for part in path.parts:
+        for part in path.parts:  # filter by path
             if part in self._cache_permit:
                 continue
             for pattern in self.EXCLUDE:
                 if fnmatch.fnmatch(part, pattern):
                     return False
-            else:
-                self._cache_permit.add(part)
+            # skip items already in database
+            if self.db and self.db.check_file_exist(File(path)):
+                return False
+
+            # finally, pass
+            self._cache_permit.add(part)
         return True
 
 
-def scan_directory(directory: str, *, save: bool = True):
+def scan_directory(directory: str, *, save: bool = True, db_path: str = None):
     directory: Path = Path(directory)
-    sf = ScanFilter()
+    sf = ScanFilter(db_path=db_path)
     filedata = [
         File(path).to_dict() for path in directory.rglob("*") if sf.is_valid(path)
     ]
