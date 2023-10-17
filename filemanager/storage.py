@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from contextlib import closing
 from typing import Dict, List, Tuple
 
 from .datatype import File
@@ -23,7 +24,11 @@ class Database:
         self.db_path = db_path
         if os.path.exists(db_path):
             assert self.validate(db_path), "you might connected the wrong database"
+        self.connection = sqlite3.connect(db_path)
         self.init_table()
+
+    def __del__(self):
+        self.connection.close()
 
     @classmethod
     def validate(cls, db_path: str):
@@ -43,8 +48,7 @@ class Database:
         return True
 
     def init_table(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        cursor = self.connection.cursor()
         # init
         cursor.execute(
             """
@@ -61,24 +65,21 @@ class Database:
             """
         )
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_files_md5 ON files (md5)")
-        conn.commit()
-        conn.close()
+        self.connection.commit()
+        cursor.close()
 
     def count_all(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM files")
-        total_rows = cursor.fetchone()[0]
-        conn.close()
-        return total_rows
+        with closing(self.connection.cursor()) as cursor:
+            cursor.execute("SELECT COUNT(*) FROM files")
+            total_rows = cursor.fetchone()[0]
+            return total_rows
 
     def update(self, data: List[Dict]):
         required_keys = {"md5", "path", "earliest_timestamp", "stat"}
         assert len(data) and required_keys.issubset(data[0]), "invalid source"
         item_num = self.count_all()
 
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        cursor = self.connection.cursor()
         for item in data:
             insert_row = (
                 item["md5"],
@@ -101,65 +102,57 @@ class Database:
             )
             cursor.execute(insert_sql, insert_row)
 
-        conn.commit()
-        conn.close()
+        self.connection.commit()
+        cursor.close()
+
         item_num_new = self.count_all()
         print("Update {} items (now: {})".format(item_num_new - item_num, item_num_new))
 
-    def merge(self, db_path: str):
+    def update_from_database(self, db_path: str):
         "merge an existing database into this one"
         update_count = 0
         if not self.validate(db_path):
             return update_count
-        main_conn = sqlite3.connect(self.db_path)
-        main_cursor = main_conn.cursor()
+
+        self_cursor = self.connection.cursor()
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("SELECT {} FROM files".format(self.field_sql))
+        field = self.field_sql.split(", ")
         for insert_row in cursor.fetchall():
             # prevent duplicate
-            lookup_sql = f"SELECT {self.field_sql} FROM files WHERE md5 = ?"
-            main_cursor.execute(lookup_sql, (insert_row[0],))
-            if any(row == insert_row for row in main_cursor.fetchall()):
+            existed_rows = self.select(dict(zip(field, insert_row)))
+            if len(existed_rows):
                 continue
 
             insert_sql = (
                 f"INSERT INTO files ({self.field_sql}) VALUES (?, ?, ?, ?, ?, ?, ?)"
             )
-            main_cursor.execute(insert_sql, insert_row)
+            self_cursor.execute(insert_sql, insert_row)
             update_count += 1
+
+        self.connection.commit()
+        self_cursor.close()
+        conn.close()
         return update_count
 
-    def show_all(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM files")
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
-        conn.close()
-        return rows
-
     def show_duplicate(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        cursor = self.connection.cursor()
         cursor.execute(
             "SELECT md5, COUNT(*) FROM files GROUP BY md5 HAVING COUNT(*) > 1"
         )
         rows = cursor.fetchall()
         for row in rows:
             print(row)
-        conn.close()
+        cursor.close()
         return rows
 
     def delete(self, ids: List[int]):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        for id in ids:
-            cursor.execute("DELETE FROM files WHERE id = ?", (id,))
-        conn.commit()
-        conn.close()
+        with closing(self.connection.cursor()) as cursor:
+            for id in ids:
+                cursor.execute("DELETE FROM files WHERE id = ?", (id,))
+            self.connection.commit()
 
     def select(self, conditions: dict) -> List[Tuple]:
         conditions = {f"{k} = ?": v for k, v in conditions.items() if k in self.FIELDS}
@@ -169,8 +162,7 @@ class Database:
         where_query = "SELECT * FROM files WHERE " + " AND ".join(conditions.keys())
         where_param = tuple(conditions.values())
 
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
+        with closing(self.connection.cursor()) as cursor:
             cursor.execute(where_query, where_param)
             return cursor.fetchall()
 
