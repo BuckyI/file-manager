@@ -1,6 +1,8 @@
 import os
 import sqlite3
-from typing import Dict, List
+from typing import Dict, List, Tuple
+
+from .datatype import File
 
 
 class Database:
@@ -159,10 +161,32 @@ class Database:
         conn.commit()
         conn.close()
 
-    def lookup(self, md5: str):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM files WHERE md5 = ?", (md5,))
-        rows = cursor.fetchall()
-        conn.close()
-        return rows
+    def select(self, conditions: dict) -> List[Tuple]:
+        conditions = {f"{k} = ?": v for k, v in conditions.items() if k in self.FIELDS}
+        if not conditions:
+            print("no conditions specified")
+            return []
+        where_query = "SELECT * FROM files WHERE " + " AND ".join(conditions.keys())
+        where_param = tuple(conditions.values())
+
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(where_query, where_param)
+            return cursor.fetchall()
+
+    def check_file_exist(self, file: File, fast: bool = True) -> bool:
+        """
+        fast: roughly check if `file` has been recorded by time info and path
+        no fast: check by md5
+        """
+
+        filestat = file.path.stat()
+        if fast:
+            info = {
+                "st_size": filestat.st_size,
+                "st_mtime_ns": filestat.st_mtime_ns,
+                "st_ctime_ns": filestat.st_ctime_ns,
+            }
+        else:
+            info = {"md5": file.hash()}
+        return bool(len(self.select(info)))
