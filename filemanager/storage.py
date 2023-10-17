@@ -23,7 +23,9 @@ class Database:
     def __init__(self, db_path="data.sqlite"):
         self.db_path = db_path
         if os.path.exists(db_path):
-            assert self.validate(db_path), "you might connected the wrong database"
+            assert self.validate_database(
+                db_path
+            ), "you might connected the wrong database"
         self.connection = sqlite3.connect(db_path)
         self.init_table()
 
@@ -31,7 +33,7 @@ class Database:
         self.connection.close()
 
     @classmethod
-    def validate(cls, db_path: str):
+    def validate_database(cls, db_path: str):
         "validate if an existing database suits this class"
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
@@ -68,16 +70,16 @@ class Database:
         self.connection.commit()
         cursor.close()
 
-    def count_all(self):
+    def count_items(self):
         with closing(self.connection.cursor()) as cursor:
             cursor.execute("SELECT COUNT(*) FROM files")
             total_rows = cursor.fetchone()[0]
             return total_rows
 
-    def update(self, data: List[Dict]):
+    def update_from_dicts(self, data: List[Dict]):
         required_keys = {"md5", "path", "earliest_timestamp", "stat"}
         assert len(data) and required_keys.issubset(data[0]), "invalid source"
-        item_num = self.count_all()
+        item_num = self.count_items()
 
         cursor = self.connection.cursor()
         for item in data:
@@ -105,13 +107,13 @@ class Database:
         self.connection.commit()
         cursor.close()
 
-        item_num_new = self.count_all()
+        item_num_new = self.count_items()
         print("Update {} items (now: {})".format(item_num_new - item_num, item_num_new))
 
     def update_from_database(self, db_path: str):
         "merge an existing database into this one"
         update_count = 0
-        if not self.validate(db_path):
+        if not self.validate_database(db_path):
             return update_count
 
         self_cursor = self.connection.cursor()
@@ -137,14 +139,12 @@ class Database:
         conn.close()
         return update_count
 
-    def show_duplicate(self):
+    def get_duplicated_items(self):
         cursor = self.connection.cursor()
         cursor.execute(
             "SELECT md5, COUNT(*) FROM files GROUP BY md5 HAVING COUNT(*) > 1"
         )
         rows = cursor.fetchall()
-        for row in rows:
-            print(row)
         cursor.close()
         return rows
 

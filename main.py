@@ -60,7 +60,7 @@ def submit(database, source):
     for file in files:
         try:
             data = json.load(open(file, "r", encoding="utf-8"))
-            db.update(data["files"])
+            db.update_from_dicts(data["files"])
             click.echo(f"Submit {str(file)} finished")
         except Exception as e:
             click.echo(f"Submit {str(file)} failed! Exception: {e}")
