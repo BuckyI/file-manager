@@ -21,11 +21,18 @@ def cli():
     type=click.Path(exists=True, file_okay=False),
     help="The folder to scan",
 )
-def scan(directory):
+@click.option(
+    "-b",
+    "--database",
+    default="index.sqlite",
+    type=click.Path(exists=True, dir_okay=False),
+    help="sqlite file, used to filter already recorded",
+)
+def scan(directory, database):
     if not Path(directory).exists():
         click.echo("directory does not exist!")
         return
-    scan_directory(directory, save=True)
+    scan_directory(directory, save=True, db_path=database)
     click.echo(f"Scan {directory} finished")
 
 
@@ -40,7 +47,7 @@ def init_database(database):
 @click.option(
     "-d",
     "--database",
-    default="data.sqlite",
+    default="index.sqlite",
     type=click.Path(exists=True, dir_okay=False),
     help="sqlite file",
 )
