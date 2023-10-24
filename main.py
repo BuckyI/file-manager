@@ -8,7 +8,7 @@ from filemanager.scan import scan_directory
 from filemanager.storage import Database
 
 
-def echo_colored_text(text: str, color: str = "red") -> str:
+def echo_colored_text(text: str, color: str = "red") -> None:
     """
     red: error
     yellow: warning

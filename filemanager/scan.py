@@ -3,6 +3,7 @@ import fnmatch
 import json
 import platform
 from pathlib import Path
+from typing import Set
 
 from .datatype import File
 from .storage import Database
@@ -15,13 +16,13 @@ class ScanFilter:
         "*.exe",  # executables
     ]
 
-    def __init__(self, *, db_path: str = None) -> None:
+    def __init__(self, *, db_path: str | None = None) -> None:
         self.db = None  # refer to database to filter items
         if db_path and Path(db_path).exists() and Database.validate_database(db_path):
             self.db = Database(db_path)
 
         # there exists many same string that is allowed
-        self._cache_permit = set()
+        self._cache_permit: Set[str] = set()
 
     def is_valid(self, path: Path) -> bool:
         if not path.is_file():  # not an existing file
@@ -41,7 +42,7 @@ class ScanFilter:
         return True
 
 
-def scan_directory(directory: str, *, save: bool = True, db_path: str = None):
+def scan_directory(directory: str, *, save: bool = True, db_path: str | None = None):
     directory: Path = Path(directory)
     sf = ScanFilter(db_path=db_path)
     filedata = [
