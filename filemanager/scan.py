@@ -5,10 +5,10 @@ import platform
 from pathlib import Path
 from typing import Set
 
-from tqdm import tqdm
-
 from .datatype import File
 from .storage import Database
+
+# from tqdm import tqdm
 
 
 class ScanFilter:
@@ -50,10 +50,9 @@ def scan_directory(
     directory: Path = Path(directory)
     sf = ScanFilter(db_path=db_path)
     filedata = [
-        File(path).to_dict()
-        for path in tqdm(directory.rglob("*"), desc="Scanning", unit="files")
-        if sf.is_valid(path)
+        File(path).to_dict() for path in directory.rglob("*") if sf.is_valid(path)
     ]
+    # tqdm(directory.rglob("*"), desc="Scanning", unit="files") # too slow!
     data = {
         "system": platform.platform(),
         "scan_directory": str(directory.absolute()),

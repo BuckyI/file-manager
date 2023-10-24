@@ -1,4 +1,3 @@
-import argparse
 import json
 from pathlib import Path
 
@@ -73,6 +72,7 @@ def scan(directory, database):
     if not confirm("Scan {}, use database at {}? ", directory, database):
         return
 
+    echo_colored_text(f"Scanning {directory} ...", "blue")
     scan_directory(directory, save=True, db_path=database)
     echo_colored_text(f"Scan {directory} finished", "green")
 
