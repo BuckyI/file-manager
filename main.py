@@ -28,6 +28,13 @@ def echo_colored_text(text: str, color: str = "red") -> str:
             click.echo(text)
 
 
+def confirm(text: str, *args) -> bool:
+    yellow_text = lambda text: "\033[33m" + text + "\033[0m"
+    args = [yellow_text(arg) for arg in args]
+    text = text.format(*args)
+    return click.confirm(text, default=False, show_default=True)
+
+
 @click.command()
 def debug():
     echo_colored_text("Welcome! ", "red")
@@ -60,6 +67,10 @@ def scan(directory, database):
     if not Path(directory).exists():
         echo_colored_text("directory does not exist!")
         return
+
+    if not confirm("Scan {}, use database at {}? ", directory, database):
+        return
+
     scan_directory(directory, save=True, db_path=database)
     echo_colored_text(f"Scan {directory} finished", "green")
 
@@ -67,6 +78,11 @@ def scan(directory, database):
 @click.command()
 @click.argument("database", type=click.Path())
 def init_database(database):
+    if not confirm("Initialize the database at {}?", database):
+        return
+    if Path(database).exists():
+        echo_colored_text("WARNING: database exists, but still continue!", "yellow")
+
     db = Database(database)
     echo_colored_text("Initialized the database", "green")
 
@@ -81,6 +97,10 @@ def init_database(database):
 )
 @click.argument("source", type=click.Path(exists=True))
 def submit(database, source):
+    if not confirm(
+        "Submit filescan_*.json inside {}, use database at {}? ", source, database
+    ):
+        return
     source = Path(source)
     # get scan result files
     if source.is_dir():
@@ -92,6 +112,8 @@ def submit(database, source):
         files = [source]
 
     db = Database(database)
+
+    echo_colored_text(f"{len(files)} files to submit", "blue")
     for file in files:
         try:
             data = json.load(open(file, "r", encoding="utf-8"))
@@ -108,3 +130,4 @@ cli.add_command(submit)
 
 if __name__ == "__main__":
     cli()
+    # debug()
