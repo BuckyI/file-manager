@@ -45,6 +45,7 @@ def debug():
 
 @click.group(help="scan file information")
 def cli():
+    "a tool to scan file information and store to database"
     pass
 
 
@@ -64,6 +65,7 @@ def cli():
     help="sqlite file, used to filter already recorded",
 )
 def scan(directory, database):
+    "scan files inside given directory"
     if not Path(directory).exists():
         echo_colored_text("directory does not exist!")
         return
@@ -78,6 +80,7 @@ def scan(directory, database):
 @click.command()
 @click.argument("database", type=click.Path())
 def init_database(database):
+    "create and initialize a new database"
     if not confirm("Initialize the database at {}?", database):
         return
     if Path(database).exists():
@@ -97,6 +100,7 @@ def init_database(database):
 )
 @click.argument("source", type=click.Path(exists=True))
 def submit(database, source):
+    "submit scan result ( filescan_*.json you got from scan ) to database"
     if not confirm(
         "Submit filescan_*.json inside {}, use database at {}? ", source, database
     ):
